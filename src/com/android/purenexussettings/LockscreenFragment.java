@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Pure Nexus Project
+ * Copyright (C) 2016 The Pure Nexus Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,25 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 
+import com.android.purenexussettings.utils.Utils;
+import com.android.purenexussettings.preferences.SystemSettingSwitchPreference;
+
 public class LockscreenFragment extends PreferenceFragment {
     public LockscreenFragment(){}
+
+    private static final String KEYGUARD_TORCH = "keyguard_toggle_torch";
+
+    private SystemSettingSwitchPreference mLsTorch;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.lockscreen_fragment);
+
+        mLsTorch = (SystemSettingSwitchPreference) findPreference(KEYGUARD_TORCH);
+        if (!Utils.deviceSupportsFlashLight(getActivity())) {
+            getPreferenceScreen().removePreference(mLsTorch);
+        }
     }
 
     @Override
